@@ -1,2 +1,3 @@
-# os_lab_2019
-The operating system practical course 2019
+# Операционные системы 2019
+
+Курс доступен по [ссылке](https://github.com/IpovsOperatingSystems/os_lab_2019).
