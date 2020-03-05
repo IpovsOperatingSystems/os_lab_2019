@@ -12,21 +12,21 @@
 ### Задание
 
 * Запустите скрипт `background.sh` в фоновом режиме.
-	[aleksha@aleksha-virtualbox src]$ ./background.sh &
-	[7] 16530
-	[aleksha@aleksha-virtualbox src]$ 1 sec
-	2 sec
-	3 sec
-	4 sec
-	5 sec
-	6 sec
-	7 sec
-	8 sec
-	9 sec
-	10 sec
-	Done!
+*	[aleksha@aleksha-virtualbox src]$ ./background.sh &
+*	[7] 16530
+*	[aleksha@aleksha-virtualbox src]$ 1 sec
+*	2 sec
+*	3 sec
+*	4 sec
+*	5 sec
+*	6 sec
+*	7 sec
+*	8 sec
+*	9 sec
+*	10 sec
+*	Done!
 
-	[7]   Завершён        ./background.sh
+*	[7]   Завершён        ./background.sh
 
 * Создайте текстовый файл и выведите его содержимое на экран терминала.
 	[aleksha@aleksha-virtualbox Alekshas]$ touch file
