@@ -39,13 +39,25 @@ int main(int argc, char **argv) {
       case 0:
         switch (option_index) {
           case 0:
-            seed = atoi(optarg);       
+            seed = atoi(optarg);
+              if (seed <= 0) {
+                printf("seed must be positiv number%d\n", seed);
+                return 1;
+            }       
             break;
           case 1:
             array_size = atoi(optarg);
+            if (array_size <= 0) {
+                printf("array_size must be positiv number%d\n", array_size);
+                return 1;
+            }
             break;
           case 2:
             pnum = atoi(optarg);
+            if (pnum <= 0) {
+                printf("pnum must be positiv number%d\n", pnum);
+                return 1;
+            }
             break;
           case 3:
             with_files = true;
@@ -85,6 +97,7 @@ int main(int argc, char **argv) {
 
   struct timeval start_time;
   gettimeofday(&start_time, NULL);
+  
   FILE *shared_file;
   int pipefd[2];
   if (with_files) {
