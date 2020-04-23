@@ -3,6 +3,6 @@
 
 #include "utils.h"
 
-struct MinMax GetMinMax(int *array, unsigned int begin, unsigned int end);
+struct MinMax GetMinMax(int*, unsigned int, const unsigned int);
 
 #endif
