@@ -20,7 +20,8 @@ volatile int child_processes_number;
 
 static void KILL(int sgnl){
     printf("Kill\n");
-     for (int i = 0; i < child_processes_number; i++) {
+    int i;
+     for (i = 0; i < child_processes_number; i++) {
     kill(child_processes_array[i], SIGKILL);
   }
 } 
@@ -75,6 +76,14 @@ int main(int argc, char **argv) {
             with_files = true;
             break;
 
+             case 4:
+                    timeout = atoi(optarg);
+                    if (timeout <= 0) {
+                        printf("timeout must be positiv \n");
+                        return 1;
+                    }
+                    break;
+
           default:
             printf("Index %d is out of options\n", option_index);
         }
@@ -108,6 +117,7 @@ int main(int argc, char **argv) {
   int active_array_step = pnum < array_size ? (array_size / pnum) : 1;
 
     if (timeout != - 1) {
+    printf("\nSET TIMEOUT.\n");    
     alarm(timeout);
     signal(SIGALRM, KILL);
   }
