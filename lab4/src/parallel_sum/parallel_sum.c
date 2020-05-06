@@ -44,9 +44,10 @@ int main(int argc, char **argv) {
    *	seed by command line arguments
    */
 
-  uint32_t threads_num = 0;
-  uint32_t array_size = 0;
-  uint32_t seed = 0;
+  uint32_t threads_num = -1;
+  uint32_t array_size = -1;
+  uint32_t seed = -1;
+  struct SumArgs args[threads_num];
   pthread_t threads[threads_num];
 
  while (true) {
@@ -108,15 +109,14 @@ int main(int argc, char **argv) {
 
 
   int *array = malloc(sizeof(int) * array_size);
-
-  struct SumArgs args[threads_num];
+  GenerateArray(array, array_size, seed);  
 
   struct timeval start_time;
   gettimeofday(&start_time, NULL);
 
    int active_step = threads_num < array_size ? (array_size / threads_num) : 1;
-   uint32_t i;
-  for (i = 0; i < threads_num; i++) {
+   
+  for (uint32_t i = 0; i < threads_num; i++) {
     if (i == threads_num - 1)
       args[i].end = array_size;
 
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
     args[i].end = (i + 1) * active_step;
   }
 
-  for (i = 0; i < threads_num; i++) {
+  for (uint32_t i = 0; i < threads_num; i++) {
     if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args)) {
       printf("Error: pthread_create failed!\n");
       return 1;
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
   }
 
   int total_sum = 0;
-  for (i = 0; i < threads_num; i++) {
+  for (uint32_t i = 0; i < threads_num; i++) {
     int sum = 0;
     pthread_join(threads[i], (void **)&sum);
     total_sum += sum;
