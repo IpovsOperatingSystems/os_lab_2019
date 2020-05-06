@@ -19,7 +19,6 @@ volatile pid_t* child_processes_array;
 volatile int child_processes_number;
 
 static void KILL(int sgnl){
-    printf("Kill\n");
     int i;
      for (i = 0; i < child_processes_number; i++) {
     kill(child_processes_array[i], SIGKILL);
