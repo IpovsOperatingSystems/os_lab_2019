@@ -24,6 +24,6 @@ int main() {
     pthread_join(threads[i], NULL);
   }
   
-  printf("First - %i\nSecond - %i\n", A, B);
+  printf("A - %i\nB - %i\n", A, B);
   return 0;
 }
