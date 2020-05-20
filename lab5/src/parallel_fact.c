@@ -108,9 +108,12 @@ int main(int argc, char **argv){
   pthread_t threads[pnum];
   PartOfArray parts[pnum];   
   for(i = 0; i < pnum; i++) {
+       
     parts[i].array_num = array;
     parts[i].begin = active_step * i;
     parts[i].end = (i + 1) * active_step;
+    if (i == pnum - 1)
+      parts[i].end = k;
   }
 struct timeval start_time;
   gettimeofday(&start_time, NULL);
@@ -134,8 +137,8 @@ struct timeval start_time;
 
   pthread_mutex_destroy(&mutex);
   free(array);
-  printf("The factorial of %i equals %i.\n", k, factorial_answer);
-  printf("The factorial of %i with module %i equals %i.\n", k, mod, factorial_answer % mod);
+  printf("The factorial of %i equals %li.\n", k, factorial_answer);
+  printf("The factorial of %i with module %i equals %li.\n", k, mod, factorial_answer % mod);
   printf("Elapsed time: %fms\n", elapsed_time);
 
   return 0;
