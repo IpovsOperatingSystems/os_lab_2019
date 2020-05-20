@@ -10,6 +10,7 @@ static int B = 1;
 void *deadlock_A(void *args) {
   pthread_mutex_lock(&A_mutex);
   A++;
+  B++;
 }
 
 int main() {
