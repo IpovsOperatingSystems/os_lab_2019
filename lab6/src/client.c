@@ -14,12 +14,6 @@
 
 #include "pthread.h"
 
-
-struct Server {
-    char ip[255];
-    int port;
-};
-
 uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
   uint64_t result = 0;
   a = a % mod;
@@ -32,6 +26,11 @@ uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
 
   return result % mod;
 }
+
+struct Server {
+    char ip[255];
+    int port;
+};
 
 struct ServerPack {
     struct Server to;
@@ -53,7 +52,7 @@ uint64_t send_to_server( struct ServerPack pack ) {
     struct sockaddr_in server;
     server.sin_family = AF_INET;
     server.sin_port = htons(pack.to.port);
-    server.sin_addr.s_addr = *((unsigned long *)hostname->h_addr);
+    server.sin_addr.s_addr = *((unsigned long *)hostname->h_addr_list[0]);
 
     int sck = socket(AF_INET, SOCK_STREAM, 0);
     if (sck < 0) {

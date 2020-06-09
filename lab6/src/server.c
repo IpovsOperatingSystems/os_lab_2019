@@ -1,3 +1,4 @@
+
 #include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -13,7 +14,6 @@
 
 #include "pthread.h"
 
-
 uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
   uint64_t result = 0;
   a = a % mod;
@@ -26,6 +26,7 @@ uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
 
   return result % mod;
 }
+
 
 struct FactorialArgs {
     uint64_t begin;
@@ -195,8 +196,8 @@ int main(int argc, char **argv) {
                 for (uint32_t i = 0; i < tnum; i++) {
                     uint64_t result = 0;
                     pthread_join(threads[i], (void **)&result);
-                   
-                     total = MultModulo(total, result, mod);
+\
+                        total = MultModulo(total, result, mod);
 
                     printf("total%d %lu, result: %lu\n", i, total, result);
                 }
