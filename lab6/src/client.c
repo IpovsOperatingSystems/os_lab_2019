@@ -15,6 +15,7 @@
 #include "pthread.h"
 
 uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
+
   uint64_t result = 0;
   a = a % mod;
   while (b > 0) {
@@ -223,8 +224,7 @@ int main(int argc, char **argv) {
     }
 
     printf("----------------------------------------\n");
-    printf("Final factorial answer: %lu\n", answer);
-    printf("Final answer: %lu\n", answer % mod);
+    printf("Final answer: %lu\n", answer);
     printf("Work was paralleled between %d servers\n", servers_num);
     printf("----------------------------------------\n");
     printf("=========================================\n");
