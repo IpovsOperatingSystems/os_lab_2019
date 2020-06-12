@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     struct sockaddr_in servaddr;
     struct sockaddr_in cliaddr;
 
-    // ------------------------- getopt -------------------------
+
 
     int buff_size = -1;
     int port = -1;
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     }
 
 
-    // ------------------------- getopt -------------------------
+
 
     if (buff_size < 100) {buff_size = 100;}
 
