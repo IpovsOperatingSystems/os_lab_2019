@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in servaddr;
 
 
-
     int buff_size = -1;
     int port = -1;
     char adress[12];
