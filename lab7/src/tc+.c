@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     int nread;
     struct sockaddr_in servaddr;
 
-    // ------------------------- getopt -------------------------
+
 
     int buff_size = -1;
     int port = -1;
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    // ------------------------- getopt -------------------------
+
 
     char *buf = (char*)malloc(sizeof(buf) * buff_size);
 
