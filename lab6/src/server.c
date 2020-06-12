@@ -13,21 +13,7 @@
 #include <sys/types.h>
 
 #include "pthread.h"
-
-uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
-    
-  uint64_t result = 0;
-  a = a % mod;
-  while (b > 0) {
-    if (b % 2 == 1)
-      result = (result + a) % mod;
-    a = (a * 2) % mod;
-    b /= 2;
-  }
-
-  return result % mod;
-}
-
+#include "MultModulo.h"
 
 struct FactorialArgs {
     uint64_t begin;
@@ -197,7 +183,7 @@ int main(int argc, char **argv) {
                 for (uint32_t i = 0; i < tnum; i++) {
                     uint64_t result = 0;
                     pthread_join(threads[i], (void **)&result);
-\
+
                         total = MultModulo(total, result, mod);
 
                     printf("total%d %lu, result: %lu\n", i, total, result);
