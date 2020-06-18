@@ -15,11 +15,23 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+volatile pid_t* child_processes_array;
+volatile int child_processes_number;
+
+static void KILL(int sgnl){
+    printf("Kill\n");
+    int i;
+     for (i = 0; i < child_processes_number; i++) {
+    kill(child_processes_array[i], SIGKILL);
+  }
+} 
+
 int main(int argc, char **argv) {
   int seed = -1;
   int array_size = -1;
   int pnum = -1;
   bool with_files = false;
+  int timeout = -1;
 
   while (true) {
     int current_optind = optind ? optind : 1;
@@ -28,6 +40,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
+                                      {"timeout", required_argument, 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -63,6 +76,14 @@ int main(int argc, char **argv) {
             with_files = true;
             break;
 
+             case 4:
+                    timeout = atoi(optarg);
+                    if (timeout <= 0) {
+                        printf("timeout must be positiv \n");
+                        return 1;
+                    }
+                    break;
+
           default:
             printf("Index %d is out of options\n", option_index);
         }
@@ -94,6 +115,12 @@ int main(int argc, char **argv) {
   GenerateArray(array, array_size, seed);
   int active_child_processes = 0;
   int active_array_step = pnum < array_size ? (array_size / pnum) : 1;
+
+    if (timeout != - 1) {
+    printf("\nSET TIMEOUT.\n");    
+    alarm(timeout);
+    signal(SIGALRM, KILL);
+  }
 
   struct timeval start_time;
   gettimeofday(&start_time, NULL);

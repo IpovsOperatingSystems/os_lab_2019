@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #include "find_min_max.h"
 #include "utils.h"
@@ -24,11 +25,27 @@ int main(int argc, char **argv) {
 
   int *array = malloc(array_size * sizeof(int));
   GenerateArray(array, array_size, seed);
+
+  struct timeval start_time;
+  gettimeofday(&start_time, NULL);
+
   struct MinMax min_max = GetMinMax(array, 0, array_size);
-  free(array);
+
+   struct timeval finish_time;
+   gettimeofday(&finish_time, NULL);
+
+   double elapsed_time = (finish_time.tv_sec - start_time.tv_sec) * 1000.0;
+   elapsed_time += (finish_time.tv_usec - start_time.tv_usec) / 1000.0;
+  
+  /*int i;
+  for(i=0;i<array_size;i++){
+      printf("%d\n",array[i]);
+  }
+  free(array);*/
 
   printf("min: %d\n", min_max.min);
   printf("max: %d\n", min_max.max);
+  printf("Elapsed time: %fms\n", elapsed_time);
 
   return 0;
 }
