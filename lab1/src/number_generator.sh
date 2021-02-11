@@ -1,8 +1,11 @@
-#!bin/sh
+#!/bin/sh
 
+rm numbers.txt > /dev/null
 touch numbers.txt
 
-for ((i=0;i<150;i++))
+for i in {1..150}
 do
-"$(sudo od -An -N1 -i /dev/random)>numbers.txt"
+
+od -An -N1 -i /dev/random >> numbers.txt
+
 done

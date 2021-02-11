@@ -9,3 +9,5 @@ done
 
 echo "Среднее значение = $(($sum/$#))"
 echo "Число элементов = $#"
+
+# cat numbers.txt | xargs ./average.sh
