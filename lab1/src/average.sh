@@ -1,12 +1,11 @@
-#! /bin/sh 
+#!/bin/sh 
 
-count=1
 sum=0
-while ((-n "$1"))
+
+for i in $@
 do
-sum = $(( $sum + $1 ))
-count = $(( $count + 1 ))
-shift
+sum=$(($sum+$i))
 done
-res = $(($sum / $count))
-echo "Среднее арифметическое: $res"
+
+echo "Среднее значение = $(($sum/$#))"
+echo "Число элементов = $#"
