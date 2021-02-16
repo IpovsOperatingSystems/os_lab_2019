@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
   GenerateArray(array, array_size, seed);
   struct MinMax min_max = GetMinMax(array, 0, array_size);
   free(array);
-
+  
   printf("min: %d\n", min_max.min);
   printf("max: %d\n", min_max.max);
 
