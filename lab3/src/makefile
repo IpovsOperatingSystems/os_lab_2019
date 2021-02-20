@@ -1,6 +1,11 @@
 CC=gcc
 CFLAGS=-I.
 
+all : parallel_min_max sequential_min_max exe
+
+exe : exe_5.c utils.o find_min_max.o utils.h find_min_max.h
+	$(CC) -o exe find_min_max.o utils.o exe_5.c $(CFLAGS)
+
 sequential_min_max : utils.o find_min_max.o utils.h find_min_max.h
 	$(CC) -o sequential_min_max find_min_max.o utils.o sequential_min_max.c -std=c99 $(CFLAGS)
 
