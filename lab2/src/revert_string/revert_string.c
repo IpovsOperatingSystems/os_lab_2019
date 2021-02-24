@@ -1,7 +1,6 @@
 #include "revert_string.h"
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 void RevertString(char *str)
 {
@@ -9,8 +8,6 @@ void RevertString(char *str)
 	
 	char* cur = str;
 	char* tmp = malloc(sizeof(char) * length);
-	
-	strcpy(cur, str);
 	
 	tmp += length - 1;
 	*tmp = '\0';
