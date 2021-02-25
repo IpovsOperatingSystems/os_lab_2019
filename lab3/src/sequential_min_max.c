@@ -21,13 +21,18 @@ int main(int argc, char **argv) {
     printf("array_size is a positive number\n");
     return 1;
   }
-
+  int i = 0;
+  
   int *array = malloc(array_size * sizeof(int));
   GenerateArray(array, array_size, seed);
+  //for (i = 0; i < array_size; ++i) {
+      //printf("%d ", array[i]);
+  //}
+
   struct MinMax min_max = GetMinMax(array, 0, array_size);
   free(array);
 
-  printf("min: %d\n", min_max.min);
+  printf("\nmin: %d\n", min_max.min);
   printf("max: %d\n", min_max.max);
 
   return 0;
