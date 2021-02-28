@@ -1,7 +1,10 @@
 CC=gcc
 CFLAGS=-I.
-all : parallel_min_max process_memory 
+all : parallel_min_max process_memory parsum
 
+
+parsum: utils.o utils.h
+	$(CC) -o parsum utils.o parallel_sum.c -lpthread -std=c99 $(CFLAGS)
 
 process_memory : process_memory.c
 	$(CC) -o process_memory process_memory.c -std=c99 $(CFLAGS)

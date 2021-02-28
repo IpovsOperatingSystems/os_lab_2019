@@ -18,7 +18,10 @@ int Sum(const struct SumArgs *args)
 {
   int sum = 0;
   for(int i=args->begin;i<args->end;i++)
+  {
     sum+=*(args->array+i);
+    printf("arg = %d\n", *(args->array+i));
+  }
   return sum;
 }
 
@@ -85,6 +88,11 @@ int main(int argc, char **argv)
 
   int *array = malloc(sizeof(int) * array_size);
   GenerateArray(array, array_size, seed);
+
+  for (int i =0; i <= array_size; i++)
+  {
+      printf("%d\n", array[i]);
+  }
 
   struct timeval start_time;
   gettimeofday(&start_time, NULL);
