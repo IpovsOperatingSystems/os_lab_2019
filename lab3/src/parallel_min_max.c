@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
     
     FILE* fp;
     char* filename = "min_max.txt";
-    int fd[2];
+    int fd[pnum][2];
 
     int active_child_processes = 0;
     int part = (float)array_size / pnum;
@@ -120,12 +120,19 @@ int main(int argc, char **argv) {
         if (rollback_file(&fp, filename) == 1) { return 1;}
         if (open_file(&fp, filename, "a+") == 1) { exit(1); }
     } 
-    else if (pipe(fd) < 0) {
+    /*else if (pipe(fd) < 0) {
         printf("Pipes failed!\n");
         return 1;
-    }
+    }*/
 
     for (int i = 0; i < pnum; i++) {
+         if (!with_files) {
+            if (pipe(fd[i])<0)
+            {
+                printf("Error while making pipe");
+                return 1;
+            }
+        }
         pid_t child_pid = fork();
         if (child_pid < 0) {
             printf("Fork failed!\n");
@@ -143,9 +150,9 @@ int main(int argc, char **argv) {
                     fprintf(fp, "%d %d\n", fork_min_max.min, fork_min_max.max);                                  
 	        	} else 
                 {
-                    int w1 = write(fd[1], &fork_min_max.min, sizeof(int));
-                    int w2 = write(fd[1], &fork_min_max.max, sizeof(int));
-                    close(fd[1]);
+                    int w1 = write(fd[i][1], &fork_min_max.min, sizeof(int));
+                    int w2 = write(fd[i][1], &fork_min_max.max, sizeof(int));
+                    close(fd[i][1]);
 	        	} 
                 exit(0);
 	    	}
@@ -174,9 +181,9 @@ int main(int argc, char **argv) {
         }
         else 
         {
-            int r1 = read(fd[0], &min, sizeof(int));
-            int r2 = read(fd[0], &max, sizeof(int));
-            close(fd[0]);
+            int r1 = read(fd[i][0], &min, sizeof(int));
+            int r2 = read(fd[i][0], &max, sizeof(int));
+            close(fd[i][0]);
         }
 
     	if (min < min_max.min) min_max.min = min;
