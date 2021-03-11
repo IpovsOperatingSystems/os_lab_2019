@@ -134,10 +134,8 @@ int main(int argc, char **argv) {
             }
         }
         pid_t child_pid = fork();
-        if (child_pid < 0) {
-            printf("Fork failed!\n");
-	        return 1;
-        }
+        if (child_pid < 0) return 1;
+
         else {
             active_child_processes++;
             if (child_pid == 0) {
@@ -163,14 +161,16 @@ int main(int argc, char **argv) {
     	active_child_processes--;
     }
 
-    struct MinMax min_max;
-    min_max.min = INT_MAX;
-    min_max.max = INT_MIN;
+    
 
     if (with_files) { 
         fclose(fp);
         open_file(&fp, filename, "r"); 
     }
+
+    struct MinMax min_max;
+    min_max.min = INT_MAX;
+    min_max.max = INT_MIN;
 
     for (int i = 0; i < pnum; i++) {
         int min = INT_MAX;
@@ -189,13 +189,13 @@ int main(int argc, char **argv) {
     	if (min < min_max.min) min_max.min = min;
     	if (max > min_max.max) min_max.max = max;
     }
-    if (with_files) fclose(fp);
 
     struct timeval finish_time;
     gettimeofday(&finish_time, NULL);
     double elapsed_time = (finish_time.tv_sec - start_time.tv_sec) * 1000.0;
     elapsed_time += (finish_time.tv_usec - start_time.tv_usec) / 1000.0;
 
+    if (with_files) fclose(fp);
     free(array);
 
     printf("Min: %d\n", min_max.min);
