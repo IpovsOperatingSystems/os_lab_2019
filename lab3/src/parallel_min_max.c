@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
   printf("Max: %d\n", min_max.max);
   printf("Elapsed time: %fms\n", elapsed_time);
   fflush(NULL);
-  remove("file.txt");
+  //remove("file.txt");
   return 0;
 }
 
