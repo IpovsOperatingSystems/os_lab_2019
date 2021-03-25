@@ -21,7 +21,9 @@ int Sum(const struct SumArgs *args)
   {
     sum+=*(args->array+i);
     printf("arg = %d\n", *(args->array+i));
+    printf("sum = %d\n", sum);
   }
+  printf("sum = %d\n", sum);
   return sum;
 }
 
@@ -109,7 +111,7 @@ int main(int argc, char **argv)
 
   for (uint32_t i = 0; i < threads_num; i++)
    {
-    if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args))
+    if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args[i]))
      {
       printf("Error: pthread_create failed!\n");
       return 1;
