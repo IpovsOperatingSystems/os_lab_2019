@@ -12,7 +12,6 @@ parallel_min_max : utils.o find_min_max.o utils.h find_min_max.h
 exec: sequential_min_max
 	$(CC) -o exec exec.c $(CFLAGS)
 
-
 utils.o : utils.h
 	$(CC) -o utils.o -c utils.c $(CFLAGS)
 

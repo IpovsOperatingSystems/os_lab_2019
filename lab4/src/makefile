@@ -1,19 +1,25 @@
 CC=gcc
 CFLAGS=-I.
 
-all: zombie process_memory
+all: zombie process_memory parallel_sum
 
-process_memory: process_memory.o
-	$(CC) -o process_memory process_memory.o
+parallel_sum: utils.o
+	$(CC) -pthread -o parallel_sum utils.o parallel_sum.c $(CFLAGS)
 
-zombie: zombie.o
-	$(CC) -o zombie zombie.o
+process_memory: 
+	$(CC) -o process_memory process_memory.c $(CFLAGS)
+
+zombie: 
+	$(CC) -o zombie zombie.c $(CFLAGS) 
 	
-process_memory.o: 
-	$(CC) -o process_memory.o -c process_memory.c
-	
-zombie.o: 
-	$(CC) -o zombie.o -c zombie.c
+parallel_min_max : utils.o find_min_max.o
+	$(CC) -o parallel_min_max utils.o find_min_max.o task1/parallel_min_max.c $(CFLAGS)
+
+find_min_max.o : task1/find_min_max.h
+	$(CC) -o find_min_max.o -c task1/find_min_max.c $(CFLAGS)
+
+utils.o: task1/utils.h
+	$(CC) -o utils.o -c task1/utils.c $(CFLAGS)
 
 clean :
-	rm *.o zombie process_memory
+	rm *.o *.a zombie process_memory parallel_sum
