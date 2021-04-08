@@ -13,4 +13,4 @@ mutex_app :
 	$(CC) -pthread -o mutex_app mutex.c $(CFLAGS)
 
 clean :
-	rm factorial_app mutex_app 
+	rm factorial_app mutex_app deadlock_app
