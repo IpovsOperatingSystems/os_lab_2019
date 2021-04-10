@@ -8,12 +8,25 @@
 #define THREAD_NUM 8
 
 pthread_mutex_t mutexFuel;
+pthread_mutex_t mutexFuel_2;
 int fuel = 50;
+
 void* do_something(void* args)
+{
+    pthread_mutex_lock(&mutexFuel_2);//deadlock
+    fuel += 50;
+    pthread_mutex_t mutexFuel;
+    printf("Incremented fuel to: %d\n", fuel);
+    pthread_mutex_unlock(&mutexFuel);
+    
+}
+
+void* do_something_2(void* args)
 {
     pthread_mutex_lock(&mutexFuel);
     pthread_mutex_lock(&mutexFuel);//deadlock
     fuel += 50;
+    pthread_mutex_t mutexFuel_2;
     printf("Incremented fuel to: %d\n", fuel);
     pthread_mutex_unlock(&mutexFuel);
 }
