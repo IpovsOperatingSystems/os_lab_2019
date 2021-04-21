@@ -12,25 +12,7 @@
 #include <sys/types.h>
 
 #include "pthread.h"
-
-struct FactorialArgs {
-  uint64_t begin;
-  uint64_t end;
-  uint64_t mod;
-};
-
-uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
-  uint64_t result = 0;
-  a = a % mod;
-  while (b > 0) {
-    if (b % 2 == 1)
-      result = (result + a) % mod;
-    a = (a * 2) % mod;
-    b /= 2;
-  }
-
-  return result % mod;
-}
+#include "factorial.h"
 
 uint64_t Factorial(int begin, int end, int mod) {
     uint64_t ans = 1;
@@ -68,24 +50,24 @@ int main(int argc, char **argv) {
                     case 0:
                         port = atoi(optarg);
                         if (port < 0 || port > 65535) {
-                            printf("port must be valid: %d\n", port);
+                            fprintf(stderr, "port must be valid: %d\n", port);
                             return 1;
                         } break;
 
                     case 1:
                         tnum = atoi(optarg);
                         if (tnum < 1) {
-                            printf("tnum must be positiv number: %d\n", tnum);
+                            fprintf(stderr, "tnum must be positiv number: %d\n", tnum);
                             return 1;
                         } break;
 
                     default:
-                        printf("Index %d is out of options\n", option_index);
+                        fprintf(stderr, "Index %d is out of options\n", option_index);
                     }
                 } break;
 
             case '?':
-                printf("Unknown argument\n");
+                fprintf(stderr, "Unknown argument\n");
                 break;
                 
             default:
@@ -148,7 +130,7 @@ int main(int argc, char **argv) {
                 break;
             }
             if (read < buffer_size) {
-                fprintf(stderr, "Client send wrong data format\n");
+                fprintf(stderr, "Client send wrong data format with size: %d, when expected: %d\n", read, buffer_size);
                 break;
             }
 
