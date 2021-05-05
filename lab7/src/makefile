@@ -1,20 +1,20 @@
 CC=gcc
 CFLAGS=-I.
-all : tcpcli tcpserv udpcli udpserv
-tcp : tcpcli tcpserv
-udp : udpcli udpserv
+all : tcp_c tcp_s udp_c udp_s
+tcp : tcp_c tcp_s
+udp : udp_c udp_s
 
-tcpcli : 
-	$(CC) -o tcpcli tcpclient.c $(CFLAGS)
+tcp_c : 
+	$(CC) -o tcp_c tcpclient.c $(CFLAGS)
 
-tcpserv : 
-	$(CC) -o tcpserv tcpserver.c $(CFLAGS)
+tcp_s : 
+	$(CC) -o tcp_s tcpserver.c $(CFLAGS)
 	
-udpcli : 
-	$(CC) -o udpcli udpclient.c $(CFLAGS)
+udp_c : 
+	$(CC) -o udp_c udpclient.c $(CFLAGS)
 
-udpserv : 
-	$(CC) -o udpserv udpserver.c $(CFLAGS)
+udp_s : 
+	$(CC) -o udp_s udpserver.c $(CFLAGS)
 
 clean :
-	rm -f tcpcli tcpserv udpcli udpserv
+	rm -f tcp_c tcp_s udp_c udp_s
