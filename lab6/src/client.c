@@ -221,7 +221,11 @@ int main(int argc, char **argv) {
    for (; i<servers_num; i++){
       args[i].server_args = *(to+i);
       args[i].begin = (k/servers_num)*i + 1;
+<<<<<<< HEAD
       args[i].end = (i == servers_num - 1 ? k : (k/servers_num)*(i+1));
+=======
+      args[i].end = (k/servers_num)*(i+1);
+>>>>>>> origin/masterr
       args[i].mod = mod;
       if (pthread_create(&threads[i], NULL, (void *)ThreadServer, (void *)(args+i))) {
       printf("Error: pthread_create failed!\n");

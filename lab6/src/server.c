@@ -166,7 +166,11 @@ int main(int argc, char **argv) {
       for (; i < tnum; i++) {
         // TODO: parallel somehow
         args[i].begin = begin + (end-begin+1)/tnum*i;
+<<<<<<< HEAD
         args[i].end = i==tnum - 1 ? end + 1: (begin + (end-begin +1)/tnum*(i+1));
+=======
+        args[i].end = begin + (end-begin+1)/tnum*(i+1);
+>>>>>>> origin/masterr
         args[i].mod = mod;
 
 
