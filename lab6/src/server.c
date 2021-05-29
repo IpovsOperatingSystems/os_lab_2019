@@ -12,6 +12,7 @@
 #include <sys/types.h>
 
 #include "pthread.h"
+#include "factorial.h"
 
 struct FactorialArgs {
   uint64_t begin;
@@ -19,24 +20,28 @@ struct FactorialArgs {
   uint64_t mod;
 };
 
-uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
-  uint64_t result = 0;
-  a = a % mod;
-  while (b > 0) {
-    if (b % 2 == 1)
-      result = (result + a) % mod;
-    a = (a * 2) % mod;
-    b /= 2;
-  }
+// uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
+//   uint64_t result = 0;
+//   a = a % mod;
+//   while (b > 0) {
+//     if (b % 2 == 1)
+//       result = (result + a) % mod;
+//     a = (a * 2) % mod;
+//     b /= 2;
+//   }
 
-  return result % mod;
-}
+//   return result % mod;
+// }
 
 uint64_t Factorial(const struct FactorialArgs *args) {
   uint64_t ans = 1;
-
+  uint64_t i = (*args).begin;
+  for (; i < (*args).end; i++){
+      ans *= i;
+  }
+  ans %= (*args).mod;
   // TODO: your code here
-
+  printf("server thread begins %llu, ends %llu - result %llu\n", (*args).begin, (*args).end-1, ans);
   return ans;
 }
 
@@ -67,11 +72,11 @@ int main(int argc, char **argv) {
       switch (option_index) {
       case 0:
         port = atoi(optarg);
-        // TODO: your code here
+        
         break;
       case 1:
         tnum = atoi(optarg);
-        // TODO: your code here
+       
         break;
       default:
         printf("Index %d is out of options\n", option_index);
@@ -157,11 +162,24 @@ int main(int argc, char **argv) {
       fprintf(stdout, "Receive: %llu %llu %llu\n", begin, end, mod);
 
       struct FactorialArgs args[tnum];
-      for (uint32_t i = 0; i < tnum; i++) {
-        // TODO: parallel somehow
-        args[i].begin = 1;
-        args[i].end = 1;
+      uint32_t i = 0;
+      uint64_t k=end-begin;
+      for (i=0; i < tnum; i++) {
+       if(i==tnum-1){
+            args[i].begin=begin+i*(k/tnum);
+            args[i].end=end+1;
+        }
+        else{
+        args[i].begin=begin+i*(k/tnum);
+        args[i].end=begin+(i+1)*(k/tnum);
+        }
+//
+/*
+        args[i].begin = begin + (end-begin)/tnum*i+1;
+        args[i].end = i==tnum - 1 ? end + 1: (begin + (end-begin +1)/tnum*(i+1));
+        args[i].end = begin + (end-begin+1)/tnum*(i+1);*/
         args[i].mod = mod;
+
 
         if (pthread_create(&threads[i], NULL, ThreadFactorial,
                            (void *)&args[i])) {
@@ -171,7 +189,8 @@ int main(int argc, char **argv) {
       }
 
       uint64_t total = 1;
-      for (uint32_t i = 0; i < tnum; i++) {
+      i = 0;
+      for (; i < tnum; i++) {
         uint64_t result = 0;
         pthread_join(threads[i], (void **)&result);
         total = MultModulo(total, result, mod);
