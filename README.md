@@ -1,22 +1,11 @@
-# Операционные системы 2019
+# MIET course by "Operating systems and Networks"
+Laboratory work is distributed in ***Lab**** folders. 
 
-Курс доступен по [ссылке](https://github.com/IpovsOperatingSystems/os_lab_2019).
+In each of which the text of the task is given, and the implementation is in the ***src*** folder.
 
-# Про то, как задавать вопросы в группу в WhatsUp:
-
-Чтобы задать вопрос вам нужно:
-1) Чтобы в сообщении был вопрос. 
-2) Если там есть код, то он должен быть выложен на ресурс, который умеет в форматирование кода. Например https://pastebin.com.
-3) В идеале должны быть шаги, которые вы предприняли, чтобы решить проблему самостоятельно.
-
-### Пример хорошего вопроса:
-Я написал программу: https://pastebin.com/YahFHx48. Я скомпилировал ее, и попытался ее выполнить, но получил ошибку "Invalid memory reference (SIGSEGV)".
-Я загуглил ошибку, но так и не понял, как исправить.
-
-### Пример плохового вопроса:
-Не работает: {тут код, который скопировали прямо в чат}.
-
-### Время работы
-
-Чат предназначен для решения вопросов вне занятий, но в нем нет круглосуточного дежурства преподавателя.
-Вы можете ориентироваться на ответ в течении 24 часов в будние дни. Вопрос нужно помечать тегом @question.
++ **Lab0-1**  =>  Introduction to Linux and the Bash language
++ **Lab2**    =>  Building dynamic and static C libraries and linking them
++ **Lab3**    =>  Child procs, system calls, Makefile
++ **Lab4**    =>  Zombi-procs, system calls, POSIX threads, 
++ **Lab5**   =>  POSIX threads, Race condition and Critical sections
++ **Lab6-7**  =>  TCP / UDP
