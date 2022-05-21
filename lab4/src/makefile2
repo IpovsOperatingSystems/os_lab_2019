@@ -1,0 +1,17 @@
+CC=gcc
+CFLAGS=-I.
+all: ../../lab3/src/parallel_min_max process_memory lab4_2
+process_memory  : process_memory.c
+	$(CC) -o process_memory process_memory.c $(CFLAGS)
+
+parallel_min_max : ../../lab3/src/utils.o ../../lab3/src/find_min_max.o ../../lab3/src/utils.h ../../lab3/src/find_min_max.h 
+	$(CC) -o ../../lab3/src/parallel_min_max utils.o ../../lab3/src/find_min_max.o ../../lab3/src/parallel_min_max.c $(CFLAGS)
+
+utils.o : ../../lab3/src/utils.h
+	$(CC) -o utils.o -c utils.c  $(CFLAGS)
+
+find_min_max.o : ../../lab3/src/utils.h ../../lab3/src/find_min_max.h
+	$(CC) -o find_min_max.o -c find_min_max.c $(CFLAGS)
+
+clean :
+	rm utils.o find_min_max.o sequential_min_max parallel_min_max process_memory
