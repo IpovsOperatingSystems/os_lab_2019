@@ -11,18 +11,29 @@
 #include <getopt.h>
 #include "find_min_max.h"
 #include "utils.h"
+int pnum; 
+
+void kill_all(int sig)
+{
+  int *PID_id = malloc(sizeof(int) * pnum);
+  for (int i=0;i<pnum;i++)
+    kill(PID_id[i],SIGKILL);
+  printf("TIMEOUT\n");
+}
 int main(int argc, char **argv) {
  int seed = -1;
  int array_size = -1;
  int pnum = -1;
  int i = 0;
  bool with_files = false;
+ int timeout=-100;
  while (true) {
  int current_optind = optind ? optind : 1;
  static struct option options[] = {{"seed", required_argument, 0, 0},
  {"array_size", required_argument, 0, 0},
  {"pnum", required_argument, 0, 0},
  {"by_files", no_argument, 0, 'f'},
+{"timeout", required_argument, 0, 0},
  {0, 0, 0, 0}};
  int option_index = 0;
  int c = getopt_long(argc, argv, "f", options, &option_index);
@@ -57,6 +68,15 @@ int main(int argc, char **argv) {
  return 1;
  }
  break;
+case 4:
+   timeout=atoi(optarg);
+   printf("Get %d",timeout);
+     if (timeout<=0)
+   {
+     printf("timeout is a positive number\n");
+     return 1;
+   }
+   break;
  case 3:
  with_files = true;
  break;
@@ -148,6 +168,15 @@ min_max.max);
  return 1;
  }
  }
+  printf("TIMEOUT NOW = %d\n",timeout);
+    if (timeout > 0)
+  {
+    int *PID_id = malloc(sizeof(int) * pnum);
+    PID_id=array_fd_read;
+    alarm(timeout);
+    signal(SIGALRM,kill_all);
+    sleep(1);
+  }
  while (active_child_processes > 0) {
  // your code here
  wait(NULL);
