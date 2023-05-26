@@ -8,3 +8,4 @@ void GenerateArray(int *array, unsigned int array_size, unsigned int seed) {
     array[i] = rand() % 100;
   }
 }
+
