@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include <sys/time.h>
 #include <sys/types.h>
@@ -15,10 +16,16 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+void sighandler(int signum) {
+   printf("Caught signal %d, coming out...\n", signum);
+   kill(0, SIGKILL);//exit immediately
+}
+
 int main(int argc, char **argv) {
   int seed = -1;
   int array_size = -1;
   int pnum = -1;
+  int timeout = -1;
   bool with_files = false;
 
   while (true) {
@@ -27,7 +34,8 @@ int main(int argc, char **argv) {
     static struct option options[] = {{"seed", required_argument, 0, 0},
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
-                                      {"by_files", no_argument, 0, 'f'},
+				      {"by_files", no_argument, 0, 'f'},
+				      {"timeout", required_argument, 0, 0},//add argument timeout
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -68,6 +76,18 @@ int main(int argc, char **argv) {
             break;
           case 3:
             with_files = true;
+            break;
+	  case 4:
+            timeout = atoi(optarg);
+            if (signal(SIGALRM, sighandler) == SIG_ERR)//Register signal handler fail
+                printf("\ncan't catch SIGINT\n");
+            alarm(timeout);//Scheduled alarm after value timeout's  seconds
+
+            if (timeout <= 0)
+            {
+                printf("Invalid arguments (timeout)!\n");
+                exit(EXIT_FAILURE);
+            }
             break;
 
           defalut:
@@ -175,10 +195,16 @@ int main(int argc, char **argv) {
             close(pipefd2[1]); // Reader will see EOF (end of file)
 	    
 	    //print min and max of part i
-       	    printf("fork %d---", i);
+       	    printf("pipe %d---", i);
             printf("min: %d, max: %d",min_max.min , min_max.max);
             printf("\n");
         }
+	//Create infinite loop in child
+	if (timeout != -1)
+        {
+            while(true) {}
+        }
+
         return 0;
       }
 
@@ -190,7 +216,16 @@ int main(int argc, char **argv) {
 
   while (active_child_processes > 0) {
     // your code here
-    wait(NULL); // blocks parent process until any of its children has finished
+    if (timeout == -1) {
+            wait(NULL); // blocks parent process until any of its children has finished
+        }
+        else {
+            waitpid(0, NULL, WNOHANG);
+	    //The set of child processes that you want to get status information for:
+	    //0 — any child process whose process group ID is equal to that of the calling process
+	    //WNOHANG — return immediately if there are no children to wait for.
+        }
+    
     active_child_processes -= 1;
   }
 
@@ -241,5 +276,13 @@ int main(int argc, char **argv) {
   printf("Max: %d\n", min_max.max);
   printf("Elapsed time: %fms\n", elapsed_time);
   fflush(NULL);
+  
+  //Create infinite loop in parents
+  if (timeout != -1)
+  {
+    while(true) {}
+  }
+
   return 0;
 }
+

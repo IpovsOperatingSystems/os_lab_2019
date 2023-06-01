@@ -1,26 +1,16 @@
-/********************************************************
- * An example source module to accompany...
- *
- * "Using POSIX Threads: Programming with Pthreads"
- *     by Brad nichols, Dick Buttlar, Jackie Farrell
- *     O'Reilly & Associates, Inc.
- *  Modified by A.Kostin
- ********************************************************
- * mutex.c
- *
- * Simple multi-threaded example with a mutex lock.
- */
 #include <errno.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void do_one_thing(int *);
 void do_another_thing(int *);
 void do_wrap_up(int);
 int common = 0; /* A shared variable for two threads */
 int r1 = 0, r2 = 0, r3 = 0;
-pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mut_1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mut_2 = PTHREAD_MUTEX_INITIALIZER;
 
 int main() {
   pthread_t thread1, thread2;
@@ -57,15 +47,18 @@ void do_one_thing(int *pnum_times) {
   unsigned long k;
   int work;
   for (i = 0; i < 50; i++) {
-    pthread_mutex_lock(&mut);
+    pthread_mutex_lock(&mut_1);
+    sleep(5);
     printf("doing one thing\n");
+    pthread_mutex_lock(&mut_2);
     work = *pnum_times;
     printf("counter = %d\n", work);
     work++; /* increment, but not write */
-    for (k = 0; k < 500000; k++)
+    for (k = 0; k < 5000; k++)
       ;                 /* long cycle */
     *pnum_times = work; /* write back */
-    pthread_mutex_unlock(&mut);
+    pthread_mutex_unlock(&mut_2);
+	pthread_mutex_unlock(&mut_1);
   }
 }
 
@@ -74,15 +67,18 @@ void do_another_thing(int *pnum_times) {
   unsigned long k;
   int work;
   for (i = 0; i < 50; i++) {
-    pthread_mutex_lock(&mut);
+    pthread_mutex_lock(&mut_2);
+    sleep(5);
     printf("doing another thing\n");
+    pthread_mutex_lock(&mut_1);
     work = *pnum_times;
     printf("counter = %d\n", work);
     work++; /* increment, but not write */
-    for (k = 0; k < 500000; k++)
+    for (k = 0; k < 5000; k++)
       ;                 /* long cycle */
     *pnum_times = work; /* write back */
-    pthread_mutex_unlock(&mut);
+    pthread_mutex_unlock(&mut_1);
+    pthread_mutex_unlock(&mut_2);
   }
 }
 
