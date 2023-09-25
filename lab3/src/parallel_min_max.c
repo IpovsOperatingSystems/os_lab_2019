@@ -40,8 +40,7 @@ int main(int argc, char **argv) {
         switch (option_index) {
           case 0:
             seed = atoi(optarg);
-            // your code here
-            // error handling
+            
             break;
           case 1:
             array_size = atoi(optarg);
