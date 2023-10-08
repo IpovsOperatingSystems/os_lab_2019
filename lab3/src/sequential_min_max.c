@@ -25,6 +25,15 @@ int main(int argc, char **argv) {
   int *array = malloc(array_size * sizeof(int));
   GenerateArray(array, array_size, seed);
   struct MinMax min_max = GetMinMax(array, 0, array_size);
+
+  FILE *fp = fopen("/workspaces/os_lab_2019/lab3/src/array.txt", "w");
+  if(fp)
+  {
+    for (int i = 0; i < array_size; i++)
+      fprintf(fp, "%d\n", array[i]);
+    fclose(fp);
+  }
+
   free(array);
 
   printf("min: %d\n", min_max.min);
