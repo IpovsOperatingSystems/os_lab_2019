@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
       return 1;
     }
   }
-// Ждем пока все потоки закончатся
+// Ждем пока все потоки закончат свое выполнение
   while (active_child_processes > 0) {
     // your code here
     int status;
