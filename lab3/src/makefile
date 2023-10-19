@@ -15,3 +15,18 @@ find_min_max.o : utils.h find_min_max.h
 
 clean :
 	rm utils.o find_min_max.o sequential_min_max parallel_min_max
+
+task4: sequential_min_max
+	$(CC) -o task4 task4.c
+	./task4
+
+
+# Запуск 2-3 задания
+make build_bin:
+	$(CC) find_min_max.c parallel_min_max.c utils.c -o task3 
+
+make up_by_files: build_bin
+	./task3 --seed 2 --array_size 1000 --pnum 4 --by_files
+
+make up_by_pipes: build_bin
+	./task3 --seed 2 --array_size 1000 --pnum 4
