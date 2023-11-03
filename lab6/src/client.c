@@ -17,18 +17,7 @@ struct Server {
   int port;
 };
 
-uint64_t MultModulo(uint64_t a, uint64_t b, uint64_t mod) {
-  uint64_t result = 0;
-  a = a % mod;
-  while (b > 0) {
-    if (b % 2 == 1)
-      result = (result + a) % mod;
-    a = (a * 2) % mod;
-    b /= 2;
-  }
 
-  return result % mod;
-}
 
 bool ConvertStringToUI64(const char *str, uint64_t *val) {
   char *end = NULL;
@@ -46,9 +35,10 @@ bool ConvertStringToUI64(const char *str, uint64_t *val) {
 }
 
 int main(int argc, char **argv) {
+  uint64_t ret = 1;
   uint64_t k = -1;
   uint64_t mod = -1;
-  char servers[255] = {'\0'}; // TODO: explain why 255
+  char servers[255] = {'\0'};
 
   while (true) {
     int current_optind = optind ? optind : 1;
@@ -69,14 +59,11 @@ int main(int argc, char **argv) {
       switch (option_index) {
       case 0:
         ConvertStringToUI64(optarg, &k);
-        // TODO: your code here
         break;
       case 1:
         ConvertStringToUI64(optarg, &mod);
-        // TODO: your code here
         break;
       case 2:
-        // TODO: your code here
         memcpy(servers, optarg, strlen(optarg));
         break;
       default:
@@ -91,28 +78,24 @@ int main(int argc, char **argv) {
       fprintf(stderr, "getopt returned character code 0%o?\n", c);
     }
   }
-
   if (k == -1 || mod == -1 || !strlen(servers)) {
     fprintf(stderr, "Using: %s --k 1000 --mod 5 --servers /path/to/file\n",
             argv[0]);
     return 1;
   }
 
-  // TODO: for one server here, rewrite with servers from file
-  unsigned int servers_num = 1;
+  unsigned int servers_num = 2;
   struct Server *to = malloc(sizeof(struct Server) * servers_num);
-  // TODO: delete this and parallel work between servers
   to[0].port = 20001;
   memcpy(to[0].ip, "127.0.0.1", sizeof("127.0.0.1"));
-
-  // TODO: work continiously, rewrite to make parallel
+  to[1].port = 20002;
+  memcpy(to[1].ip, "127.0.0.1", sizeof("127.0.0.1"));
   for (int i = 0; i < servers_num; i++) {
     struct hostent *hostname = gethostbyname(to[i].ip);
     if (hostname == NULL) {
       fprintf(stderr, "gethostbyname failed with %s\n", to[i].ip);
       exit(1);
     }
-
     struct sockaddr_in server;
     server.sin_family = AF_INET;
     server.sin_port = htons(to[i].port);
@@ -128,11 +111,8 @@ int main(int argc, char **argv) {
       fprintf(stderr, "Connection failed\n");
       exit(1);
     }
-
-    // TODO: for one server
-    // parallel between servers
-    uint64_t begin = 1;
-    uint64_t end = k;
+    uint64_t begin = (k * i) / servers_num;
+    uint64_t end = (k * (i + 1)) / servers_num;
 
     char task[sizeof(uint64_t) * 3];
     memcpy(task, &begin, sizeof(uint64_t));
@@ -149,16 +129,16 @@ int main(int argc, char **argv) {
       fprintf(stderr, "Recieve failed\n");
       exit(1);
     }
-
-    // TODO: from one server
-    // unite results
     uint64_t answer = 0;
     memcpy(&answer, response, sizeof(uint64_t));
-    printf("answer: %llu\n", answer);
-
+    if (answer) {
+      ret = (ret * answer) % 10;
+    } else {
+      ret = 1;
+    }
     close(sck);
   }
   free(to);
-
+  printf("Answer: %llu\n", ret);
   return 0;
 }
