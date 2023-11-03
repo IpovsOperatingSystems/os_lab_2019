@@ -15,9 +15,13 @@
 #include "find_min_max.h"
 #include "utils.h"
 
-void Killing(int sig){
-    kill(-1, SIGKILL);
-    printf("TIMEOUT\n");
+pid_t child_pid;  // Идентификатор дочернего процесса
+volatile bool child_exited = false;  // Флаг, указывающий на завершение дочернего процесса
+
+// Обработчик сигнала SIGALRM (вызывается по истечению таймаута)
+void alarm_handler(int signum) {
+    printf("Таймаут истек. Отправляем SIGKILL дочернему процессу...\n");
+    kill(child_pid, SIGKILL);  // Отправляем сигнал SIGKILL дочернему процессу
 }
 
 int main(int argc, char **argv) {
@@ -134,6 +138,11 @@ int main(int argc, char **argv) {
       }
   }
 
+  if (timeout > 0) {  // Если таймаут задан, устанавливаем таймаут с использованием функции alarm
+    signal(SIGALRM, alarm_handler);  // Устанавливаем обработчик сигнала SIGALRM
+    alarm(timeout);  // Устанавливаем таймаут (в секундах)
+  }
+
   for (int i = 0; i < pnum; i++) {
     pid_t child_pid = fork();
     if (child_pid >= 0) {
@@ -185,13 +194,6 @@ int main(int argc, char **argv) {
       printf("Fork failed!\n");
       return 1;
     }
-  }
-
-  //Вызов Killing
-  if(timeout>0)
-  {
-      signal(SIGALRM, Killing);
-      alarm(timeout);
   }
 
   // Пока есть активные процессы
