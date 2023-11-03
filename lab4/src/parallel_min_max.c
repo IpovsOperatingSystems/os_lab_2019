@@ -15,9 +15,19 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+pid_t child_pid;  // Идентификатор дочернего процесса
+volatile bool child_exited = false;  // Флаг, указывающий на завершение дочернего процесса
+
+// Обработчик сигнала SIGALRM (вызывается по истечению таймаута)
+void alarm_handler(int signum) {
+    printf("Таймаут истек. Отправляем SIGKILL дочернему процессу...\n");
+    kill(child_pid, SIGKILL);  // Отправляем сигнал SIGKILL дочернему процессу
+}
+
 int main(int argc, char **argv) {
   int seed = -1;
   int array_size = -1;
+  int timeout = -1;
   int pnum = -1;
   bool with_files = false;
 
@@ -28,6 +38,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
+                                      {"timeout", required_argument, 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -67,6 +78,14 @@ int main(int argc, char **argv) {
             break;
           case 3:
             with_files = true;
+            break;
+
+          case 4:
+            timeout = atoi(optarg);
+            if (timeout <= 0){
+                printf("timeout must be a positive number\n");
+                return 1;
+            }
             break;
 
           default:
@@ -117,6 +136,11 @@ int main(int argc, char **argv) {
            perror("pipe");
           return 1;
       }
+  }
+
+  if (timeout > 0) {  // Если таймаут задан, устанавливаем таймаут с использованием функции alarm
+    signal(SIGALRM, alarm_handler);  // Устанавливаем обработчик сигнала SIGALRM
+    alarm(timeout);  // Устанавливаем таймаут (в секундах)
   }
 
   for (int i = 0; i < pnum; i++) {

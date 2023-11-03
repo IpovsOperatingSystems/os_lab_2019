@@ -1,0 +1,4 @@
+#!/bin/bash
+pwd
+date
+echo "I have $1 in my pocket"
