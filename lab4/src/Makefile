@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-I.
 
 task1: 
-	./parallel_min_max --seed 42 --array_size 100 --pnum 5 --timeout 20
+	./parallel_min_max --seed 42 --array_size 100 --pnum 5 --timeout 5
 
 zombie: zombie.c
 	$(CC) -o zombie zombie.c
