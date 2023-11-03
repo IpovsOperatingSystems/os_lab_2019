@@ -12,4 +12,4 @@ factorial_complile: factorial.c
 	$(CC) -o factorial factorial.c $(LDFLAGS)
 
 factorial:
-	./factorial --k 10 --pnum 4 --mod 10
+	./factorial --k 10 --pnum 4 --mod 1
